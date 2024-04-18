@@ -1,4 +1,6 @@
 use crate::{seat::Seats, tui};
+use color_eyre::eyre::Context;
+use color_eyre::Result;
 use crossterm::event::{self, KeyCode, KeyEvent, KeyEventKind};
 use ratatui::{
     prelude::*,
@@ -15,10 +17,10 @@ impl App {
     pub fn new(seats: Seats) -> Self {
         App { seats, exit: false }
     }
-    pub fn run(&mut self, terminal: &mut tui::Tui) -> io::Result<()> {
+    pub fn run(&mut self, terminal: &mut tui::Tui) -> Result<()> {
         while !self.exit {
             terminal.draw(|frame| self.render_frame(frame))?;
-            self.handle_events()?;
+            self.handle_events().wrap_err("handle events failed")?;
         }
         Ok(())
     }

@@ -1,23 +1,26 @@
 mod app;
+mod errors;
 mod seat;
 mod tui;
 
 use app::App;
+use color_eyre::Result;
 use seat::{Seat, Seats};
 use serde::{Deserialize, Serialize};
-use std::{fs, io};
+use std::fs;
 
 #[derive(Serialize, Deserialize)]
 struct Json {
     seats: Vec<Vec<Option<String>>>,
 }
 
-fn main() -> io::Result<()> {
+fn main() -> Result<()> {
+    errors::install_hooks()?;
     let mut terminal = tui::init()?;
     let seats = read_seats("seats-map.json");
-    let app_result = App::new(seats).run(&mut terminal);
+    App::new(seats).run(&mut terminal)?;
     tui::restore()?;
-    app_result
+    Ok(())
 }
 
 fn read_seats(path: &str) -> Seats {
