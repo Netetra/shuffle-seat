@@ -28,13 +28,10 @@ impl App {
         frame.render_widget(self, frame.size())
     }
     fn handle_events(&mut self) -> io::Result<()> {
-        match event::read()? {
-            event::Event::Key(key_event) => {
-                if key_event.kind == KeyEventKind::Press {
-                    self.handle_key_event(key_event);
-                }
+        if let event::Event::Key(key_event) = event::read()? {
+            if key_event.kind == KeyEventKind::Press {
+                self.handle_key_event(key_event);
             }
-            _ => {}
         }
         Ok(())
     }
@@ -58,10 +55,10 @@ impl Widget for &App {
             .title_top(Line::from(" Shuffle Seats ".yellow()).centered())
             .title_bottom(
                 Line::from(vec![
-                    " Shuffle ".yellow().into(),
-                    "<Space>".blue().into(),
-                    " Exit ".yellow().into(),
-                    "<Q> or <ESC> ".blue().into(),
+                    " Shuffle ".yellow(),
+                    "<Space>".blue(),
+                    " Exit ".yellow(),
+                    "<Q> or <ESC> ".blue(),
                 ])
                 .centered(),
             )
@@ -70,8 +67,8 @@ impl Widget for &App {
         let inner = block.inner(area);
         let layouts = self.seats.layout(inner);
 
-        for (layout, seats_line) in layouts.into_iter().zip(self.seats.0.clone().into_iter()) {
-            for (rect, seat) in layout.into_iter().zip(seats_line.into_iter()) {
+        for (layout, seats_line) in layouts.iter().zip(self.seats.0.clone().into_iter()) {
+            for (rect, seat) in layout.iter().zip(seats_line.into_iter()) {
                 seat.render(*rect, buf);
             }
         }

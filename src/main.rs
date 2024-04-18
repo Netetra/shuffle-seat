@@ -29,12 +29,7 @@ fn read_seats(path: &str) -> Seats {
     let seats: Vec<Vec<Seat>> = json
         .seats
         .into_iter()
-        .map(|seat_line| {
-            seat_line
-                .into_iter()
-                .map(|member| Seat::new(member))
-                .collect()
-        })
+        .map(|seat_line| seat_line.into_iter().map(Seat::new).collect())
         .collect();
     Seats::new(seats)
 }

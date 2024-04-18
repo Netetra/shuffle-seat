@@ -67,7 +67,7 @@ impl Seats {
 impl Widget for Seat {
     fn render(self, area: Rect, buf: &mut Buffer) {
         if let Some(member) = self.member {
-            let text = Text::from(Line::from(vec![member.green().into()]));
+            let text = Text::from(Line::from(vec![member.green()]));
             Paragraph::new(text)
                 .block(Block::default().borders(Borders::all()))
                 .render(area, buf);
