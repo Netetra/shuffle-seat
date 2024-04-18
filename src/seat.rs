@@ -1,3 +1,4 @@
+use rand::seq::SliceRandom;
 use ratatui::{
     buffer::Buffer,
     layout::{Constraint, Direction, Layout, Rect},
@@ -41,6 +42,25 @@ impl Seats {
                     .split(layout[i])
             })
             .collect::<Vec<Rc<[Rect]>>>()
+    }
+    pub fn shuffle(&mut self) {
+        let mut members: Vec<String> = self
+            .0
+            .clone()
+            .iter()
+            .flatten()
+            .filter_map(|x| x.member.clone())
+            .collect();
+        let mut rng = rand::thread_rng();
+        members.shuffle(&mut rng);
+        for (y, seats_line) in self.0.clone().iter().enumerate() {
+            for (x, seat) in seats_line.iter().enumerate() {
+                if seat.member.is_none() {
+                    continue;
+                }
+                self.0[y][x] = Seat::new(Some(members.pop().unwrap()));
+            }
+        }
     }
 }
 

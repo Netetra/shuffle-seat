@@ -14,7 +14,7 @@ struct Json {
 
 fn main() -> io::Result<()> {
     let mut terminal = tui::init()?;
-    let seats = read_seats("seats.json");
+    let seats = read_seats("seats-map.json");
     let app_result = App::new(seats).run(&mut terminal);
     tui::restore()?;
     app_result

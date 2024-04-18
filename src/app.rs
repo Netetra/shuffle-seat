@@ -39,7 +39,9 @@ impl App {
     fn handle_key_event(&mut self, key_event: KeyEvent) {
         match key_event.code {
             KeyCode::Esc | KeyCode::Char('q') => self.exit(),
-            KeyCode::Char(' ') => {}
+            KeyCode::Char(' ') => {
+                self.seats.shuffle();
+            }
             _ => {}
         }
     }
