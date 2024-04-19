@@ -42,7 +42,7 @@ fn read_seats(path: &str) -> Seats {
 fn write_seats(path: &str, seats: Seats) -> Result<()> {
     let json = Json {
         seats: seats
-            .0
+            .get()
             .into_iter()
             .map(|seats_line| {
                 seats_line

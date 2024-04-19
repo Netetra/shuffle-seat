@@ -38,9 +38,7 @@ impl App {
     fn handle_key_event(&mut self, key_event: KeyEvent) {
         match key_event.code {
             KeyCode::Esc | KeyCode::Char('q') => self.exit(),
-            KeyCode::Char(' ') => {
-                self.seats.shuffle();
-            }
+            KeyCode::Char(' ') => self.seats.shuffle(),
             _ => {}
         }
     }
@@ -70,7 +68,7 @@ impl Widget for &App {
         let inner = block.inner(area);
         let layouts = self.seats.layout(inner);
 
-        for (layout, seats_line) in layouts.iter().zip(self.seats.0.clone().into_iter()) {
+        for (layout, seats_line) in layouts.iter().zip(self.seats.get().clone().into_iter()) {
             for (rect, seat) in layout.iter().zip(seats_line.into_iter()) {
                 seat.render(*rect, buf);
             }

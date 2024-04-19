@@ -14,7 +14,7 @@ pub struct Seat {
 }
 
 #[derive(Clone)]
-pub struct Seats(pub Vec<Vec<Seat>>);
+pub struct Seats(Vec<Vec<Seat>>);
 
 impl Seat {
     pub fn new(member: Option<String>) -> Self {
@@ -56,7 +56,7 @@ impl Seats {
             .collect();
         let mut rng = rand::thread_rng();
         members.shuffle(&mut rng);
-        for (y, seats_line) in self.0.clone().iter().enumerate() {
+        for (y, seats_line) in self.get().iter().enumerate() {
             for (x, seat) in seats_line.iter().enumerate() {
                 if seat.member.is_none() {
                     continue;
@@ -64,6 +64,9 @@ impl Seats {
                 self.0[y][x] = Seat::new(Some(members.pop().unwrap()));
             }
         }
+    }
+    pub fn get(&self) -> Vec<Vec<Seat>> {
+        self.0.clone()
     }
 }
 
