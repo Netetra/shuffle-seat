@@ -7,6 +7,7 @@ use app::App;
 use color_eyre::Result;
 use seat::{Seat, Seats};
 use serde::{Deserialize, Serialize};
+use std::env;
 use std::fs;
 
 #[derive(Serialize, Deserialize)]
@@ -15,7 +16,8 @@ struct Json {
 }
 
 fn main() -> Result<()> {
-    let path = "seats-map.json";
+    let args: Vec<String> = env::args().collect();
+    let path = args.get(1).expect("json file path not set");
     errors::install_hooks()?;
     let mut terminal = tui::init()?;
     let seats = read_seats(path);
