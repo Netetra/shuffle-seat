@@ -50,7 +50,7 @@ fn write_seats(path: &str, seats: Seats) -> Result<()> {
             })
             .collect(),
     };
-    let file = serde_json::to_string(&json)?;
+    let file = serde_json::to_string_pretty(&json)?;
     let _ = fs::write(path, file);
     Ok(())
 }
