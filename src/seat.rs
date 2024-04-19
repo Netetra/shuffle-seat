@@ -20,6 +20,9 @@ impl Seat {
     pub fn new(member: Option<String>) -> Self {
         Seat { member }
     }
+    pub fn get_member(&self) -> Option<String> {
+        self.member.clone()
+    }
 }
 
 impl Seats {

@@ -15,11 +15,14 @@ struct Json {
 }
 
 fn main() -> Result<()> {
+    let path = "seats-map.json";
     errors::install_hooks()?;
     let mut terminal = tui::init()?;
-    let seats = read_seats("seats-map.json");
-    App::new(seats).run(&mut terminal)?;
+    let seats = read_seats(path);
+    let mut app = App::new(seats);
+    app.run(&mut terminal)?;
     tui::restore()?;
+    write_seats(path, app.get_seats())?;
     Ok(())
 }
 
@@ -32,4 +35,22 @@ fn read_seats(path: &str) -> Seats {
         .map(|seat_line| seat_line.into_iter().map(Seat::new).collect())
         .collect();
     Seats::new(seats)
+}
+
+fn write_seats(path: &str, seats: Seats) -> Result<()> {
+    let json = Json {
+        seats: seats
+            .0
+            .into_iter()
+            .map(|seats_line| {
+                seats_line
+                    .into_iter()
+                    .map(|seat| seat.get_member())
+                    .collect()
+            })
+            .collect(),
+    };
+    let file = serde_json::to_string(&json)?;
+    let _ = fs::write(path, file);
+    Ok(())
 }

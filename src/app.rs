@@ -47,6 +47,9 @@ impl App {
     fn exit(&mut self) {
         self.exit = true;
     }
+    pub fn get_seats(&self) -> Seats {
+        self.seats.clone()
+    }
 }
 
 impl Widget for &App {
