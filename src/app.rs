@@ -10,17 +10,27 @@ use std::io;
 
 pub struct App {
     seats: Seats,
+    shuffling: bool,
     exit: bool,
 }
 
 impl App {
     pub fn new(seats: Seats) -> Self {
-        App { seats, exit: false }
+        App {
+            seats,
+            shuffling: false,
+            exit: false,
+        }
     }
     pub fn run(&mut self, terminal: &mut tui::Tui) -> Result<()> {
         while !self.exit {
             terminal.draw(|frame| self.render_frame(frame))?;
-            self.handle_events().wrap_err("handle events failed")?;
+            if self.shuffling {
+                self.seats.shuffle();
+            }
+            if crossterm::event::poll(std::time::Duration::from_millis(50))? {
+                self.handle_events().wrap_err("handle events failed")?;
+            }
         }
         Ok(())
     }
@@ -38,7 +48,7 @@ impl App {
     fn handle_key_event(&mut self, key_event: KeyEvent) {
         match key_event.code {
             KeyCode::Esc | KeyCode::Char('q') => self.exit(),
-            KeyCode::Char(' ') => self.seats.shuffle(),
+            KeyCode::Char(' ') => self.shuffling = !self.shuffling,
             _ => {}
         }
     }
